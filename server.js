@@ -1,4 +1,5 @@
 import express from "express";
+import methodoverride from "method-override";
 import { v4 as uuid } from "uuid";
 uuid();
 const app = express();
@@ -7,6 +8,7 @@ const PORT = 3000;
 uuid();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(methodoverride("_method"));
 app.set("view engine", "ejs");
 
 const array = [
@@ -17,7 +19,7 @@ const array = [
   { id: uuid(), username: "rocky", comment: "user name is rocky" },
   { id: uuid(), username: "kamal", comment: "this is ghansala's comment" },
 ];
-
+//GET HTTP request --- get the data
 app.get("/", (req, res) => {
   res.send("the first page ");
 });
@@ -28,7 +30,7 @@ app.get("/comments", (req, res) => {
 app.get("/comments/new", (req, res) => {
   res.render("comments/new");
 });
-
+//POST HTTP request --- receive the data
 app.post("/comments/new", (req, res) => {
   console.log(req.body); // debugging
   const { username, comment } = req.body; // de-structure
@@ -41,13 +43,34 @@ app.post("/comments/new", (req, res) => {
 
   console.log(array); // debuging
 });
-
+//GET with id HTTP request
 app.get("/comments/:id", (req, res) => {
   const { id } = req.params;
   const comment = array.find((c) => {
     return c.id === id;
   });
   res.render("comments/show", { comment });
+});
+
+app.get("/comments/:id/edit", (req, res) => {
+  const { id } = req.params;
+  const comment = array.find((c) => {
+    return c.id === id;
+  });
+  res.render("comments/edit", { comment });
+});
+//PATCH HTTP request--- update the existing data
+
+app.patch("/comments/:id", (req, res) => {
+  const { id } = req.params;
+  const newCommentText = req.body.comment;
+  const foundComment = array.find((c) => {
+    return c.id === id;
+  });
+
+  foundComment.comment = newCommentText;
+
+  res.redirect("/comments");
 });
 
 app.listen(PORT, () => {
