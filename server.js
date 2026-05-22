@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodoverride("_method"));
 app.set("view engine", "ejs");
 
-const array = [
+let array = [
   { id: uuid(), username: "rohit", comment: "user name is rohit" },
   { id: uuid(), username: "mohan", comment: "this is mohans comment" },
   { id: uuid(), username: "jon", comment: "user jone say hii" },
@@ -72,6 +72,13 @@ app.patch("/comments/:id", (req, res) => {
 
   res.redirect("/comments");
 });
+// Delete crud operation delete http method
+
+app.delete("/comments/:id", (req,res)=>{
+  const {id}=req.params;
+  array=array.filter((c)=> c.id !==id );
+  res.redirect("/comments");
+})
 
 app.listen(PORT, () => {
   console.log(`server is running on localhost:${PORT}`);

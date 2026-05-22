@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>showing latest comment</title>
 </head>
+
 <body>
-  <h1>data for id <%= comment.id %></h1>
-  
-  <h3><%= comment.username %>-><%= comment.comment %></h3>
+  <h1>data for id <%= comment.id %>
+  </h1>
+
+  <h3>
+    <%= comment.username %>-><%= comment.comment %>
+  </h3>
 
   <a href="/comments">go to call comments</a>
   <a href="/comments/<%=comment.id%>/edit">Edit comment</a>
+  <form method="POST" action="/comments/<%= comment.id%>?_method=DELETE">
+    <button>DELETE</button>
+  </form>
 </body>
+
 </html>
